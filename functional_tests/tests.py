@@ -49,7 +49,6 @@ class NewVisitorTest(LiveServerTestCase):
         # When she hits enter the page updates and now the page lists
         # "1: Buy peacock feathers" as an item in a to-do list table
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
         self.wait_for_list_in_table("1: Buy peacock feathers")
         
         # There is still a text box inviting her to add another item.
@@ -58,8 +57,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox = self.browser.find_element(By.ID, "id_new_item")
         inputbox.send_keys("Use peacock feathers to make a fly")
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
-        
+
         # the page updates again, and now shows both items on her list
         self.wait_for_list_in_table("2: Use peacock feathers to make a fly")
         self.wait_for_list_in_table("1: Buy peacock feathers")
