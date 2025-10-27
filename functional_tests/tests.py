@@ -61,3 +61,45 @@ class NewVisitorTest(LiveServerTestCase):
         # the page updates again, and now shows both items on her list
         self.wait_for_list_in_table("2: Use peacock feathers to make a fly")
         self.wait_for_list_in_table("1: Buy peacock feathers")
+    
+    def test_multiple_users_can_start_a_todo_list(self):
+        # Edith starts a new todo list
+        self.browser.get(self.live_server_url)
+        inputbox = self.browser.find_element(By.ID, "id_new_item")
+        inputbox.send_keys('Buy peacock feathers')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_list_in_table('1: Buy peacock feathers')
+        
+        # she notices that her list has a unique url
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, "/lists/.+")
+        
+        # Now  new user, francis comes along to the site 
+        
+        ## We delete all the browser's cookies
+        ## as a way to simulate a fresh new user session 
+        self.browser.delete_all_cookies()
+        
+        # Francis visits the homepage there is now sign of Edith's list
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element(By.TAG_NAME, 'body')
+        self.assertNotIn( 'Buy peacock feathers', page_text)
+        
+        # Francis starts a new list by entering a new item.
+        # He is less interesting than Edith
+        inputbox = self.browser.find_element(By.ID, 'id_new_item')
+        inputbox.send_keys("Buy milk")
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_list_in_table("1: Buy milk")
+        
+        # Francis gets his own unique url
+        francis_list_url = self.browser.current_url
+        self.assertRegex(francis_list_url, '/lists/.+')
+        self.assertNotEqual(francis_list_url, edith_list_url)
+        
+        # Again there is no trace of Edith's list
+        page_text = self.browser.find_element(By.TAG_NAME, 'body')
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertIn("Buy milk", page_text)
+        
+        # Satisfied, they both go back to sleep
