@@ -12,7 +12,11 @@ class HomePageTest(TestCase):
     def test_renders_input_form(self):
         response = self.client.get('/')
         self.assertContains(response,'<form method="Post" action="/lists/new">')
-        self.assertContains(response, '<input name="item_text"')
+        self.assertContains(
+                response, 
+                '<input class="form-control form-control-lg" name="item_text" id="id_new_item" placeholder="Enter a to-do item" />',
+                html=True,
+        )
 
     def test_only_saves_items_when_necssary(self):
         response = self.client.get('/')
@@ -40,7 +44,11 @@ class ListViewTest(TestCase):
         mylist = List.objects.create()
         response = self.client.get(f"/lists/{mylist.id}/")
         self.assertContains(response,f'<form method="Post" action="/lists/{mylist.id}/add_item">')
-        self.assertContains(response, '<input name="item_text"')
+        self.assertContains(
+                response, 
+                '<input class="form-control form-control-lg" name="item_text" id="id_new_item" placeholder="Enter a to-do item" />',
+                html=True,
+        )
         
     def test_displays_all_lists_items(self):
         correct_list = List.objects.create()
