@@ -63,32 +63,6 @@ class ListViewTest(TestCase):
         self.assertContains(response, "itemey 1")
         self.assertContains(response, "itemey 2")
         self.assertNotContains(response, 'Some random item')
-   
-    
-        
-        
-class ListAndItemModelTest(TestCase):
-    def test_saving_and_retrieving_items(self):
-        mylist = List()
-        mylist.save()
-        
-        first_item= Item()
-        first_item.text = "The first (ever) list item"
-        first_item.list = mylist
-        first_item.save()
-        
-        second_item = Item()
-        second_item.text = "Item the second"
-        second_item.list = mylist
-        second_item.save()
-        
-        saved_items = Item.objects.all()
-        first_saved_item = saved_items[0]
-        second_saved_item = saved_items[1]
-        self.assertEqual(first_saved_item.text, "The first (ever) list item") 
-        self.assertEqual(first_saved_item.list, mylist)
-        self.assertEqual(second_saved_item.text, "Item the second")
-        self.assertEqual(second_saved_item.list, mylist)  
         
 class NewItemTest(TestCase):
     def test_can_save_a_POST_request_to_an_existing_list(self):
