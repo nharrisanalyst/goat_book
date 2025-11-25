@@ -26,7 +26,7 @@ class ListAndItemModelTest(TestCase):
         self.assertEqual(second_saved_item.text, "Item the second")
         self.assertEqual(second_saved_item.list, mylist)
         
-    def test_canNot_save_null_list_items(self):
+    def test_cannot_save_null_list_items(self):
         mylist = List.objects.create()
         item = Item(list=mylist, text=None)  
         with self.assertRaises(IntegrityError):
